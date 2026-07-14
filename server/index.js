@@ -1,10 +1,14 @@
 import { createReadStream, existsSync, statSync } from "node:fs";
 import { createServer } from "node:http";
 import { dirname, extname, join, normalize } from "node:path";
-import { fileURLToPath } from "node:url";
 
-const here = dirname(fileURLToPath(import.meta.url));
-const publicDir = normalize(join(here, "../client"));
+const entryDir = dirname(process.argv[1] || "dist/server/index.js");
+const candidates = [
+  join(process.cwd(), "dist/client"),
+  join(process.cwd(), "client"),
+  join(entryDir, "../client"),
+];
+const publicDir = normalize(candidates.find((path) => existsSync(path)) || candidates[0]);
 const port = Number(process.env.PORT || 3000);
 
 const types = {
