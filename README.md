@@ -6,18 +6,23 @@
 
 ```text
 src/data/projects.js
-        │ 项目内容与图片路径
-        ▼
-src/components/ProjectCard.vue ── select(project) ──► src/App.vue
-                                                        │ activeProject
-                                                        ▼
-                                      src/components/ProjectModal.vue
+        │ 单一项目数据源
+        ├──────────────► HomeView ──► ProjectCard（精选项目）
+        ├──────────────► ProjectsView（全部项目网格）
+        └──────────────► ProjectDetailView（独立详情页）
+                                      ▲
+                                      │ /projects/:id
+                               Vue Router
 ```
 
-- `src/App.vue`：只负责页面区块和当前项目状态，不保存项目详情实现。
+- `src/App.vue`：全局导航、页脚和路由出口。
+- `src/router.js`：定义主页、项目库和项目详情路由，并负责页面滚动位置。
 - `src/data/projects.js`：项目内容的唯一数据源；新增项目主要修改这里。
-- `src/components/ProjectCard.vue`：项目列表中的封面、摘要和入口。
-- `src/components/ProjectModal.vue`：案例详情、焦点管理、Esc 关闭和页面滚动锁定。
+- `src/views/HomeView.vue`：主页与精选项目。
+- `src/views/ProjectsView.vue`：响应式 1—3 列项目库。
+- `src/views/ProjectDetailView.vue`：可独立访问和分享的项目案例页。
+- `src/components/ProjectCard.vue`：主页精选项目的封面、摘要和详情入口。
+- `server/index.js`：静态资源服务和 SPA 路由回退，保证详情页刷新不出现 404。
 - `src/style.css`：全局视觉令牌、页面布局、组件样式与响应式规则。
 - `public/images/projects/`：页面实际加载的 WebP 文件。
 - `artwork/source/`：保留高质量 PNG 源文件，不参与站点构建。
@@ -26,7 +31,8 @@ src/components/ProjectCard.vue ── select(project) ──► src/App.vue
 
 1. 将 3:2 图片放入 `public/images/projects/`，优先使用 WebP。
 2. 在 `src/data/projects.js` 增加一个项目对象，并提供准确的 `coverAlt`。
-3. 不需要修改卡片或弹窗组件；它们通过统一的数据结构渲染。
+3. 需要在主页展示时设置 `featured: true`；只放在项目库中时设置为 `false`。
+4. 不需要新增页面或修改路由，项目库与详情页会自动生成。
 
 ## 图片说明
 

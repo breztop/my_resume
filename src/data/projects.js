@@ -1,6 +1,7 @@
 export const projects = [
   {
     id: "p2p",
+    featured: true,
     number: "01",
     kicker: "NETWORKED CO-OP",
     visualLabel: "P2P / STATE SYNC",
@@ -20,6 +21,7 @@ export const projects = [
   },
   {
     id: "tower",
+    featured: true,
     number: "02",
     kicker: "SYSTEMIC STRATEGY",
     visualLabel: "DATA / MODULAR SYSTEMS",
@@ -39,6 +41,7 @@ export const projects = [
   },
   {
     id: "cards",
+    featured: true,
     number: "03",
     kicker: "AUTHORITATIVE MULTIPLAYER",
     visualLabel: "SERVER / DETERMINISTIC TURN",
