@@ -1,0 +1,5 @@
+node_modules/
+dist/
+artwork/source/
+npm-debug.log*
+.DS_Store
