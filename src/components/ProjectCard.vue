@@ -1,11 +1,15 @@
 <script setup>
-defineProps({
+import { computed } from "vue";
+import { getRelatedProjects } from "../data/projects.js";
+
+const props = defineProps({
   project: {
     type: Object,
     required: true,
   },
 });
 
+const relatedProjects = computed(() => getRelatedProjects(props.project));
 </script>
 
 <template>
@@ -35,6 +39,12 @@ defineProps({
       <h4>{{ project.subtitle }}</h4>
       <p class="project-summary">{{ project.summary }}</p>
       <div class="tags"><span v-for="tag in project.tags" :key="tag">{{ tag }}</span></div>
+      <div v-if="relatedProjects.length" class="featured-related">
+        <span>{{ project.systemLabel }}</span>
+        <RouterLink v-for="related in relatedProjects" :key="related.id" :to="`/projects/${related.id}`">
+          查看{{ related.partLabel }} <i>↗</i>
+        </RouterLink>
+      </div>
       <RouterLink class="text-button" :to="`/projects/${project.id}`">
         查看项目详情
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" /></svg>

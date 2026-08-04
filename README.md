@@ -31,8 +31,10 @@ src/data/projects.js
 
 1. 将 3:2 图片放入 `public/images/projects/`，优先使用 WebP。
 2. 在 `src/data/projects.js` 增加一个项目对象，并提供准确的 `coverAlt`。
-3. 需要在主页展示时设置 `featured: true`；只放在项目库中时设置为 `false`。
-4. 不需要新增页面或修改路由，项目库与详情页会自动生成。
+3. 用 `category` 将项目归入 `client`、`server` 或 `tooling`；需要在主页展示时设置 `featured: true`。
+4. 同一系统的多个实现使用相同的 `system`，并在 `relatedProjectIds` 中互相填写项目 id，即可生成关联入口。
+5. 项目可选提供 `modules`、`roadmap` 和 `principles`，详情页会自动生成信息架构、阶段规划与设计约束。
+6. 不需要新增页面或修改路由，项目库与详情页会自动生成。
 
 ## 图片说明
 
