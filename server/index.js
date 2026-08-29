@@ -4,7 +4,7 @@ export default {
       const url = new URL(request.url);
 
       if (request.method === "GET" && !url.pathname.split("/").at(-1)?.includes(".")) {
-        url.pathname = "/index.html";
+        url.pathname = "/";
         return env.ASSETS.fetch(new Request(url, request));
       }
 
