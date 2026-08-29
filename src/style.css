@@ -35,8 +35,11 @@ img { display: block; max-width: 100%; }
 .brand { font-size: 20px; font-weight: 900; letter-spacing: -0.06em; }
 .brand span { color: var(--blue); }
 .nav-links { display: flex; align-items: center; gap: 38px; font-size: 17px; font-weight: 650; }
-.nav-links > a:not(.nav-cta) { transition: opacity .2s; }
-.nav-links > a:not(.nav-cta):hover { opacity: .5; }
+.nav-link { position: relative; transition: color .2s, opacity .2s; }
+.nav-link::after { position: absolute; right: 0; bottom: -8px; left: 0; height: 2px; background: var(--blue); content: ""; transform: scaleX(0); transform-origin: left; transition: transform .2s; }
+.nav-link:hover { opacity: .5; }
+.nav-link-active { color: var(--blue); }
+.nav-link-active::after { transform: scaleX(1); }
 .nav-cta { display: flex; align-items: center; gap: 28px; color: white; background: var(--ink); padding: 13px 18px; }
 .nav-cta svg, .text-button svg, .contact a svg { width: 19px; fill: none; stroke: currentColor; stroke-width: 1.8; }
 
@@ -132,9 +135,10 @@ img { display: block; max-width: 100%; }
 .archive-filter-head p { margin: 0; color: var(--muted); font-size: 12px; }
 .archive-filter-head strong { color: var(--ink); font: 800 12px monospace; }
 .archive-tabs { display: grid; grid-template-columns: repeat(4, max-content); border: 1px solid var(--line); }
-.archive-tabs button { display: flex; align-items: center; justify-content: space-between; gap: 24px; min-height: 50px; padding: 11px 15px; background: transparent; cursor: pointer; text-align: left; transition: color .2s, background-color .2s; }
+.archive-tabs button { display: flex; align-items: center; justify-content: space-between; gap: 24px; min-height: 50px; padding: 11px 15px; background: transparent; cursor: pointer; text-align: left; transition: color .2s, background-color .2s, transform .12s; }
 .archive-tabs button + button { border-left: 1px solid var(--line); }
 .archive-tabs button:hover { background: rgba(255,255,255,.42); }
+.archive-tabs button:active { transform: translateY(1px); }
 .archive-tabs button[aria-pressed="true"] { color: white; background: var(--ink); }
 .archive-tabs span { font-size: 13px; font-weight: 800; white-space: nowrap; }
 .archive-tabs small { color: var(--muted); font: 750 11px monospace; }

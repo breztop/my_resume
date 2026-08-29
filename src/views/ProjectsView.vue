@@ -2,7 +2,28 @@
 import { computed, ref } from "vue";
 import { projectCategories, projects } from "../data/projects.js";
 
-const selectedCategory = ref("all");
+const categoryStorageKey = "portfolio:selected-project-category";
+const validCategoryIds = new Set(["all", ...projectCategories.map((category) => category.id)]);
+
+const getStoredCategory = () => {
+  try {
+    const storedCategory = sessionStorage.getItem(categoryStorageKey);
+    return validCategoryIds.has(storedCategory) ? storedCategory : "all";
+  } catch {
+    return "all";
+  }
+};
+
+const selectedCategory = ref(getStoredCategory());
+
+const selectCategory = (categoryId) => {
+  selectedCategory.value = categoryId;
+  try {
+    sessionStorage.setItem(categoryStorageKey, categoryId);
+  } catch {
+    // Filtering still works when browser storage is unavailable.
+  }
+};
 
 const categoryFilters = computed(() => [
   { id: "all", filterLabel: "全部", count: projects.length },
@@ -34,7 +55,7 @@ const projectGroups = computed(() =>
   <section class="archive shell">
     <header class="archive-head">
       <div>
-        <p class="eyebrow">PROJECT ARCHIVE · {{ projects.length.toString().padStart(2, "0") }} SELECTED WORKS</p>
+        <p class="eyebrow">PROJECT ARCHIVE · {{ projects.length.toString().padStart(2, "0") }} WORKS</p>
         <h1>项目集</h1>
       </div>
       <p>游戏、网络服务与桌面工具。这里不再用评分替作品说话，直接从画面和问题进入案例。</p>
@@ -51,7 +72,7 @@ const projectGroups = computed(() =>
           :key="category.id"
           type="button"
           :aria-pressed="selectedCategory === category.id"
-          @click="selectedCategory = category.id"
+          @click="selectCategory(category.id)"
         >
           <span>{{ category.filterLabel }}</span>
           <small>{{ category.count.toString().padStart(2, "0") }}</small>
