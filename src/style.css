@@ -126,12 +126,17 @@ img { display: block; max-width: 100%; }
 .archive-head .eyebrow { margin: 0 0 24px; color: var(--blue); }
 .archive-head h1 { margin: 0; font-size: clamp(64px, 8vw, 106px); line-height: .92; letter-spacing: -.07em; }
 .archive-head > p { max-width: 510px; margin: 0; color: var(--muted); font-size: 20px; line-height: 1.75; }
-.archive-tabs { display: grid; grid-template-columns: repeat(4, 1fr); margin-bottom: 82px; border: 1px solid var(--line); }
-.archive-tabs button { display: flex; align-items: center; justify-content: space-between; min-height: 58px; padding: 13px 17px; border-right: 1px solid var(--line); background: transparent; cursor: pointer; text-align: left; transition: color .2s, background-color .2s; }
-.archive-tabs button:last-child { border-right: 0; }
+.archive-filter { width: fit-content; max-width: 100%; margin-bottom: 82px; }
+.archive-filter-head { display: flex; align-items: baseline; justify-content: space-between; gap: 48px; margin-bottom: 13px; }
+.archive-filter-head h2 { margin: 0; font-size: 13px; letter-spacing: .08em; }
+.archive-filter-head p { margin: 0; color: var(--muted); font-size: 12px; }
+.archive-filter-head strong { color: var(--ink); font: 800 12px monospace; }
+.archive-tabs { display: grid; grid-template-columns: repeat(4, max-content); border: 1px solid var(--line); }
+.archive-tabs button { display: flex; align-items: center; justify-content: space-between; gap: 24px; min-height: 50px; padding: 11px 15px; background: transparent; cursor: pointer; text-align: left; transition: color .2s, background-color .2s; }
+.archive-tabs button + button { border-left: 1px solid var(--line); }
 .archive-tabs button:hover { background: rgba(255,255,255,.42); }
 .archive-tabs button[aria-pressed="true"] { color: white; background: var(--ink); }
-.archive-tabs span { font-size: 14px; font-weight: 800; }
+.archive-tabs span { font-size: 13px; font-weight: 800; white-space: nowrap; }
 .archive-tabs small { color: var(--muted); font: 750 11px monospace; }
 .archive-tabs button[aria-pressed="true"] small { color: #b8bcb3; }
 .archive-group + .archive-group { margin-top: 105px; }
@@ -195,21 +200,21 @@ img { display: block; max-width: 100%; }
 
 @media (max-width: 900px) {
   .shell { width: min(100% - 36px, 700px); }
-  .nav { height: 76px; }.nav-links { gap: 20px; }.nav-links > a:nth-child(2) { display: none; }.nav-cta { padding: 11px 14px; }
+  .nav { height: 76px; }.nav-links { gap: 20px; }.nav-cta { padding: 11px 14px; }
   .hero { min-height: 690px; padding-top: 60px; }.hero h1 { margin-top: 45px; font-size: clamp(56px, 14vw, 88px); }.hero-bottom { display: flex; flex-direction: column-reverse; align-items: flex-start; gap: 30px; }.hero-bottom > p { font-size: 18px; }.hero-stats { margin-top: 48px; }.hero-stats > div + div { padding-left: 16px; }
   .work { padding: 110px 0; }.section-head { display: block; }.section-head h2 { margin-bottom: 25px; }.projects { gap: 110px; }.project, .project:nth-child(even) { grid-template-columns: 1fr; gap: 35px; }.project:nth-child(even) .project-visual, .project:nth-child(even) .project-info { grid-column: 1; grid-row: auto; }.project-media { height: 440px; }.project-index { margin-bottom: 24px; }
   .about { padding: 110px 0; }.about-inner { grid-template-columns: 1fr; gap: 35px; }.about-copy > p { margin: 15px 0 55px; }
-  .archive { padding-top: 80px; }.archive-head { display: block; }.archive-head > p { margin-top: 30px; }.archive-tabs { grid-template-columns: repeat(2, 1fr); }.archive-tabs button:nth-child(2) { border-right: 0; }.archive-tabs button:nth-child(-n + 2) { border-bottom: 1px solid var(--line); }
+  .archive { padding-top: 80px; }.archive-head { display: block; }.archive-head > p { margin-top: 30px; }
 }
 
 @media (max-width: 560px) {
-  .shell { width: calc(100% - 30px); }.nav-links { gap: 0; }.nav-links > a:not(.nav-cta) { display: none; }.nav-cta { padding: 11px 13px; }.hero { min-height: 680px; }.hero h1 { font-size: clamp(49px, 15vw, 70px); line-height: .98; }.hero h1 span { white-space: normal; }.hero h1 span::after { height: 4px; }
+  .shell { width: calc(100% - 30px); }.brand { font-size: 17px; }.nav-links { gap: 12px; font-size: 14px; }.nav-cta { gap: 12px; padding: 10px 11px; }.nav-cta svg { width: 16px; }.hero { min-height: 680px; }.hero h1 { font-size: clamp(49px, 15vw, 70px); line-height: .98; }.hero h1 span { white-space: normal; }.hero h1 span::after { height: 4px; }
   .availability { font-size: 11px; }.hero-stats strong { font-size: 18px; }.hero-stats span { font-size: 11px; }.hero-stats > div { padding-top: 20px; }
   .section-head h2 { font-size: 52px; }.project-media { height: 340px; }.media-label { right: 27px; bottom: 25px; left: 27px; flex-direction: column; gap: 4px; }.project-media::before { inset: 12px; }
   .all-projects-callout { align-items: flex-start; flex-direction: column; margin-top: 80px; }.all-projects-callout a { width: 100%; justify-content: space-between; }
   .contact { padding-block: 110px; }.contact h2 { font-size: 65px; }.contact > a { font-size: 17px; }
   .footer { padding: 28px 0; flex-wrap: wrap; gap: 13px; }.footer span:nth-child(2) { display: none; }
-  .archive { padding: 65px 0 110px; }.archive-head { margin-bottom: 48px; }.archive-head h1 { font-size: 62px; }.archive-head > p { font-size: 17px; }.archive-tabs { margin-bottom: 62px; }.archive-tabs button { min-height: 50px; padding: 10px 12px; }.archive-group + .archive-group { margin-top: 72px; }.archive-grid { grid-template-columns: 1fr; gap: 52px; }.archive-card-copy h3 { font-size: 36px; }
+  .archive { padding: 65px 0 110px; }.archive-head { margin-bottom: 48px; }.archive-head h1 { font-size: 62px; }.archive-head > p { font-size: 17px; }.archive-filter { width: 100%; margin-bottom: 62px; }.archive-filter-head { gap: 20px; }.archive-tabs { grid-template-columns: repeat(2, minmax(0, 1fr)); }.archive-tabs button { min-width: 0; min-height: 50px; padding: 10px 12px; }.archive-tabs button:nth-child(3) { border-left: 0; }.archive-tabs button:nth-child(n + 3) { border-top: 1px solid var(--line); }.archive-group + .archive-group { margin-top: 72px; }.archive-grid { grid-template-columns: 1fr; gap: 52px; }.archive-card-copy h3 { font-size: 36px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

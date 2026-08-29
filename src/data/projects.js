@@ -698,6 +698,7 @@ export const projectCategories = [
     index: "01",
     label: "CLIENT / GAMEPLAY",
     title: "客户端与游戏端",
+    filterLabel: "游戏 / 客户端",
     description: "聚焦玩法、交互、画面表现与运行时系统的项目实现。",
   },
   {
@@ -705,6 +706,7 @@ export const projectCategories = [
     index: "02",
     label: "SERVER / NETWORK",
     title: "服务端与网络层",
+    filterLabel: "服务 / 网络",
     description: "聚焦房间、会话、状态裁决与多人连接链路的服务端实现。",
   },
   {
@@ -712,6 +714,7 @@ export const projectCategories = [
     index: "03",
     label: "TOOLS / CAPABILITY",
     title: "工具与基础能力",
+    filterLabel: "工具 / 能力",
     description: "聚焦跨平台设备发现、能力验证、诊断与开发基础设施。",
   },
 ];

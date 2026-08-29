@@ -3,10 +3,9 @@
     <nav class="nav shell" aria-label="主导航">
       <RouterLink class="brand" to="/" aria-label="返回首页">DEV<span>/WORKS</span></RouterLink>
       <div class="nav-links">
-        <RouterLink to="/projects">全部项目</RouterLink>
-        <RouterLink :to="{ path: '/', hash: '#about' }">能力</RouterLink>
-        <RouterLink class="nav-cta" :to="{ path: '/', hash: '#work' }">
-          精选案例 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" /></svg>
+        <RouterLink :to="{ path: '/', hash: '#about' }">关于我</RouterLink>
+        <RouterLink class="nav-cta" to="/projects">
+          项目集 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" /></svg>
         </RouterLink>
       </div>
     </nav>

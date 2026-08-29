@@ -5,12 +5,17 @@ import { projectCategories, projects } from "../data/projects.js";
 const selectedCategory = ref("all");
 
 const categoryFilters = computed(() => [
-  { id: "all", title: "全部", count: projects.length },
+  { id: "all", filterLabel: "全部", count: projects.length },
   ...projectCategories.map((category) => ({
     ...category,
     count: projects.filter((project) => project.category === category.id).length,
   })),
 ]);
+
+const visibleProjectCount = computed(() =>
+  categoryFilters.value.find((category) => category.id === selectedCategory.value)?.count
+  ?? projects.length,
+);
 
 const projectGroups = computed(() =>
   projectCategories
@@ -35,18 +40,24 @@ const projectGroups = computed(() =>
       <p>游戏、网络服务与桌面工具。这里不再用评分替作品说话，直接从画面和问题进入案例。</p>
     </header>
 
-    <nav class="archive-tabs" aria-label="按项目方向筛选">
-      <button
-        v-for="category in categoryFilters"
-        :key="category.id"
-        type="button"
-        :aria-pressed="selectedCategory === category.id"
-        @click="selectedCategory = category.id"
-      >
-        <span>{{ category.title }}</span>
-        <small>{{ category.count.toString().padStart(2, "0") }}</small>
-      </button>
-    </nav>
+    <div class="archive-filter">
+      <header class="archive-filter-head">
+        <h2 id="project-filter-title">按方向筛选</h2>
+        <p aria-live="polite">显示 <strong>{{ visibleProjectCount }}</strong> 个项目</p>
+      </header>
+      <nav class="archive-tabs" aria-labelledby="project-filter-title">
+        <button
+          v-for="category in categoryFilters"
+          :key="category.id"
+          type="button"
+          :aria-pressed="selectedCategory === category.id"
+          @click="selectedCategory = category.id"
+        >
+          <span>{{ category.filterLabel }}</span>
+          <small>{{ category.count.toString().padStart(2, "0") }}</small>
+        </button>
+      </nav>
+    </div>
 
     <section v-for="group in projectGroups" :key="group.id" class="archive-group">
       <header class="archive-group-head">
