@@ -1,12 +1,25 @@
 <script setup>
-import { computed } from "vue";
-import { getRelatedProjects, projectCategories, projects } from "../data/projects.js";
+import { computed, ref } from "vue";
+import { projectCategories, projects } from "../data/projects.js";
+
+const selectedCategory = ref("all");
+
+const categoryFilters = computed(() => [
+  { id: "all", title: "全部", count: projects.length },
+  ...projectCategories.map((category) => ({
+    ...category,
+    count: projects.filter((project) => project.category === category.id).length,
+  })),
+]);
 
 const projectGroups = computed(() =>
   projectCategories
     .map((category) => ({
       ...category,
-      projects: projects.filter((project) => project.category === category.id),
+      projects: projects.filter((project) =>
+        project.category === category.id
+        && (selectedCategory.value === "all" || selectedCategory.value === category.id),
+      ),
     }))
     .filter((category) => category.projects.length),
 );
@@ -16,51 +29,54 @@ const projectGroups = computed(() =>
   <section class="archive shell">
     <header class="archive-head">
       <div>
-        <p class="eyebrow">PROJECT ARCHIVE · {{ projects.length.toString().padStart(2, "0") }} ITEMS</p>
-        <h1>全部项目</h1>
+        <p class="eyebrow">PROJECT ARCHIVE · {{ projects.length.toString().padStart(2, "0") }} SELECTED WORKS</p>
+        <h1>项目集</h1>
       </div>
-      <p>按方向快速浏览项目。选择名称进入完整案例；同一系统的相关实现会在列表中直接标出。</p>
+      <p>游戏、网络服务与桌面工具。这里不再用评分替作品说话，直接从画面和问题进入案例。</p>
     </header>
+
+    <nav class="archive-tabs" aria-label="按项目方向筛选">
+      <button
+        v-for="category in categoryFilters"
+        :key="category.id"
+        type="button"
+        :aria-pressed="selectedCategory === category.id"
+        @click="selectedCategory = category.id"
+      >
+        <span>{{ category.title }}</span>
+        <small>{{ category.count.toString().padStart(2, "0") }}</small>
+      </button>
+    </nav>
 
     <section v-for="group in projectGroups" :key="group.id" class="archive-group">
       <header class="archive-group-head">
-        <div>
-          <p>{{ group.index }} / {{ group.label }}</p>
-          <h2>{{ group.title }}</h2>
-        </div>
-        <p>{{ group.projects.length.toString().padStart(2, "0") }} ITEMS</p>
+        <p>{{ group.index }} / {{ group.label }}</p>
+        <h2>{{ group.title }}</h2>
+        <span>{{ group.projects.length.toString().padStart(2, "0") }} PROJECTS</span>
       </header>
 
-      <div class="project-list">
+      <div class="archive-grid">
         <article
           v-for="project in group.projects"
           :key="project.id"
-          class="project-row"
-          :class="`project-row-${project.color}`"
+          class="archive-card"
+          :class="`project-${project.color}`"
         >
-          <RouterLink class="project-row-main" :to="`/projects/${project.id}`">
-            <figure class="project-row-media">
+          <RouterLink :to="`/projects/${project.id}`" :aria-label="`查看${project.title}详情`">
+            <figure :class="{ 'archive-card-media-contain': project.mediaFit === 'contain' }">
               <img :src="project.cover" :alt="project.coverAlt" width="1536" height="1024" loading="lazy" decoding="async" />
+              <figcaption><span>{{ project.number }}</span><span>{{ project.year }}</span></figcaption>
             </figure>
-            <div class="project-row-copy">
-              <p>{{ project.number }} · {{ project.kicker }} · {{ project.year }}</p>
+            <div class="archive-card-copy">
+              <p>{{ project.kicker }}</p>
               <h3>{{ project.title }}</h3>
               <h4>{{ project.subtitle }}</h4>
-              <div class="project-row-tags"><span v-for="tag in project.tags" :key="tag">{{ tag }}</span></div>
+              <div>
+                <span v-for="tag in project.tags.slice(0, 3)" :key="tag">{{ tag }}</span>
+              </div>
+              <i aria-hidden="true">↗</i>
             </div>
-            <span class="project-row-arrow" aria-hidden="true">→</span>
           </RouterLink>
-
-          <div v-if="getRelatedProjects(project).length" class="related-strip">
-            <span>{{ project.systemLabel }}</span>
-            <RouterLink
-              v-for="related in getRelatedProjects(project)"
-              :key="related.id"
-              :to="`/projects/${related.id}`"
-            >
-              关联：{{ related.title }} <i>↗</i>
-            </RouterLink>
-          </div>
         </article>
       </div>
     </section>

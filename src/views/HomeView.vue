@@ -51,11 +51,11 @@ const featuredProjects = projects.filter((project) => project.featured).slice(0,
       </div>
     </section>
 
-    <section id="contact" class="contact shell">
-      <p class="eyebrow">LET'S BUILD SOMETHING</p><h2>有合适的机会？<br /><span>聊聊吧。</span></h2>
-      <p>正在寻找游戏开发 / 客户端 / 服务端相关机会。</p>
-      <a href="mailto:yourname@example.com">yourname@example.com <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" /></svg></a>
-      <small>请将这里替换为你的真实邮箱</small>
+    <section id="more" class="contact shell">
+      <p class="eyebrow">CONTINUE EXPLORING</p><h2>还有更多<br /><span>完整案例。</span></h2>
+      <p>从游戏玩法到网络协议与桌面工具，每个项目都使用与内容匹配的案例表达。</p>
+      <RouterLink to="/projects">浏览完整项目集 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" /></svg></RouterLink>
+      <small>{{ projects.length }} 个项目 · 持续更新</small>
     </section>
   </div>
 </template>
