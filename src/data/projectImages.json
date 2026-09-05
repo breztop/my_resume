@@ -1,0 +1,74 @@
+{
+  "/images/projects/cards-cover.webp": {
+    "small": "/images/projects/cards-cover-640.webp",
+    "large": "/images/projects/cards-cover-1280.webp",
+    "width": 1280,
+    "height": 853
+  },
+  "/images/projects/conutline-cover.png": {
+    "small": "/images/projects/conutline-cover-640.webp",
+    "large": "/images/projects/conutline-cover-1280.webp",
+    "width": 1280,
+    "height": 853
+  },
+  "/images/projects/device-manager-cover.webp": {
+    "small": "/images/projects/device-manager-cover-640.webp",
+    "large": "/images/projects/device-manager-cover-1280.webp",
+    "width": 1280,
+    "height": 853
+  },
+  "/images/projects/elemental-3d-cover.png": {
+    "small": "/images/projects/elemental-3d-cover-640.webp",
+    "large": "/images/projects/elemental-3d-cover-1280.webp",
+    "width": 1280,
+    "height": 853
+  },
+  "/images/projects/face-scan-cover.png": {
+    "small": "/images/projects/face-scan-cover-640.webp",
+    "large": "/images/projects/face-scan-cover-1280.webp",
+    "width": 1280,
+    "height": 853
+  },
+  "/images/projects/lipreading-cover.png": {
+    "small": "/images/projects/lipreading-cover-640.webp",
+    "large": "/images/projects/lipreading-cover-1280.webp",
+    "width": 1280,
+    "height": 853
+  },
+  "/images/projects/miracast-cover.png": {
+    "small": "/images/projects/miracast-cover-640.webp",
+    "large": "/images/projects/miracast-cover-1280.webp",
+    "width": 1280,
+    "height": 853
+  },
+  "/images/projects/narrative-dialogue-cover.png": {
+    "small": "/images/projects/narrative-dialogue-cover-640.webp",
+    "large": "/images/projects/narrative-dialogue-cover-1280.webp",
+    "width": 1280,
+    "height": 853
+  },
+  "/images/projects/p2p-cover.webp": {
+    "small": "/images/projects/p2p-cover-640.webp",
+    "large": "/images/projects/p2p-cover-1280.webp",
+    "width": 1280,
+    "height": 853
+  },
+  "/images/projects/screenshot-cover.webp": {
+    "small": "/images/projects/screenshot-cover-640.webp",
+    "large": "/images/projects/screenshot-cover-1280.webp",
+    "width": 1280,
+    "height": 853
+  },
+  "/images/projects/tower-cover.webp": {
+    "small": "/images/projects/tower-cover-640.webp",
+    "large": "/images/projects/tower-cover-1280.webp",
+    "width": 1280,
+    "height": 853
+  },
+  "/images/projects/tribal-war-2d-cover.png": {
+    "small": "/images/projects/tribal-war-2d-cover-640.webp",
+    "large": "/images/projects/tribal-war-2d-cover-1280.webp",
+    "width": 1280,
+    "height": 853
+  }
+}

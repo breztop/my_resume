@@ -1,8 +1,8 @@
 <script setup>
+import ProjectImage from "../components/ProjectImage.vue";
+import ProjectByline from "../components/ProjectByline.vue";
 defineProps({
   project: { type: Object, required: true },
-  previousProject: { type: Object, default: null },
-  nextProject: { type: Object, default: null },
 });
 </script>
 
@@ -10,7 +10,7 @@ defineProps({
   <article class="spatial-page">
     <header class="spatial-hero">
       <div class="hero-nav">
-        <RouterLink to="/projects">Index ↗</RouterLink>
+        <RouterLink to="/projects">← 全部作品</RouterLink>
         <span>Spatial study · {{ project.year }}</span>
       </div>
 
@@ -18,11 +18,12 @@ defineProps({
         <div class="hero-title">
           <p>{{ project.kicker }}</p>
           <h1>{{ project.title }}</h1>
+          <ProjectByline :project="project" />
           <span>{{ project.subtitle }}</span>
         </div>
         <figure>
           <div class="frame-note frame-note-a">CAM A / FOLLOW</div>
-          <img :src="project.cover" :alt="project.coverAlt" />
+          <ProjectImage :project="project" priority />
           <div class="frame-note frame-note-b">CAM B / OVERVIEW</div>
           <figcaption>{{ project.visualLabel }}</figcaption>
         </figure>
@@ -30,12 +31,12 @@ defineProps({
       </div>
     </header>
 
-    <main>
+    <div class="case-content">
       <section class="project-intro">
         <p class="intro-copy">{{ project.summary }}</p>
         <dl>
-          <div><dt>Contribution</dt><dd>{{ project.role }}</dd></div>
-          <div><dt>Toolkit</dt><dd>{{ project.stack.join(" / ") }}</dd></div>
+          <div><dt>我的职责</dt><dd>{{ project.role }}</dd></div>
+          <div><dt>技术栈</dt><dd>{{ project.stack.join(" / ") }}</dd></div>
         </dl>
       </section>
 
@@ -86,6 +87,7 @@ defineProps({
       </section>
 
       <section v-if="project.roadmap?.length" class="camera-roadmap">
+        <p class="roadmap-note">后续演进 · 以下为路线图，具体阶段以项目说明为准。</p>
         <header><span>04 / DEPTH PLAN</span><h2>景深不是一次完成的。</h2></header>
         <article v-for="(phase, index) in project.roadmap" :key="phase.label">
           <div class="lens"><i :style="{ '--lens': `${46 + index * 24}px` }" /></div>
@@ -98,13 +100,9 @@ defineProps({
         <p>DESIGN PRINCIPLES</p>
         <blockquote v-for="principle in project.principles" :key="principle">{{ principle }}</blockquote>
       </section>
-    </main>
+    </div>
 
-    <nav class="spatial-pagination" aria-label="项目翻页">
-      <RouterLink v-if="previousProject" :to="`/projects/${previousProject.id}`"><small>← Previous</small><span>{{ previousProject.title }}</span></RouterLink>
-      <RouterLink to="/projects" class="all-projects">All projects</RouterLink>
-      <RouterLink v-if="nextProject" :to="`/projects/${nextProject.id}`"><small>Next →</small><span>{{ nextProject.title }}</span></RouterLink>
-    </nav>
+
   </article>
 </template>
 
@@ -124,7 +122,7 @@ defineProps({
 .hero-stage { position: relative; max-width: 1440px; min-height: 780px; margin: 74px auto 0; }
 .hero-title { position: relative; z-index: 3; width: 62%; }
 .hero-title p { margin: 0 0 20px; font: 700 11px ui-monospace, monospace; letter-spacing: .2em; }
-.hero-title h1 { max-width: 900px; margin: 0; font-family: Georgia, "Songti SC", serif; font-size: clamp(68px, 9vw, 138px); font-weight: 400; line-height: .84; letter-spacing: -.075em; }
+.hero-title h1 { max-width: 900px; margin: 0; font-family: Georgia, "Songti SC", serif; font-size: clamp(68px, 9vw, 138px); font-weight: 400; line-height:1.1; letter-spacing: -.075em; }
 .hero-title > span { display: block; max-width: 440px; margin-top: 34px; font-size: 17px; line-height: 1.6; }
 .hero-stage figure { position: absolute; top: 145px; right: 0; width: 62%; margin: 0; padding: 14px; background: #d9e3dd; transform: rotate(1.5deg); box-shadow: 28px 34px 0 #c7ff86; }
 .hero-stage figure::before { position: absolute; inset: -34px auto auto 9%; width: 1px; height: 90px; content: ""; background: #19352a; }
@@ -134,7 +132,7 @@ defineProps({
 .frame-note-a { top: 30px; left: -38px; }.frame-note-b { right: -28px; bottom: 70px; }
 .hero-index { position: absolute; bottom: -5px; left: 0; margin: 0; color: #163329; font: 300 clamp(90px, 15vw, 210px)/.75 Arial, sans-serif; letter-spacing: -.1em; opacity: .13; }
 
-main { overflow: hidden; }
+.case-content { overflow: hidden; }
 .project-intro { display: grid; grid-template-columns: 1.5fr 1fr; gap: 8vw; padding: 120px clamp(20px, 8vw, 130px); background: #153027; color: #e9fff5; }
 .intro-copy { max-width: 820px; margin: 0; font-family: Georgia, "Songti SC", serif; font-size: clamp(25px, 3vw, 43px); line-height: 1.45; }
 .project-intro dl { margin: 0; }
@@ -195,7 +193,7 @@ main { overflow: hidden; }
 .spatial-pagination a:last-child { text-align: right; }.spatial-pagination small { color: #68766f; font-size: 10px; text-transform: uppercase; letter-spacing: .13em; }.spatial-pagination span { font: 400 20px Georgia, serif; }
 .spatial-pagination .all-projects { display: block; padding: 12px 20px; border: 1px solid currentColor; font-size: 11px; text-transform: uppercase; letter-spacing: .13em; }
 
-@media (max-width: 700px) {
+@media (max-width:900px) {
   .spatial-hero { padding: 20px 18px 70px; }.hero-stage { min-height: 630px; margin-top: 50px; }.hero-title { width: 100%; }.hero-title h1 { font-size: 64px; }.hero-title > span { font-size: 14px; }
   .hero-stage figure { top: 275px; width: 94%; }.frame-note-b { right: -8px; }.hero-index { display: none; }
   .project-intro { grid-template-columns: 1fr; padding: 78px 18px; }.intro-copy { font-size: 25px; }
@@ -210,4 +208,11 @@ main { overflow: hidden; }
 @media (prefers-reduced-motion: reduce) {
   .spatial-page *, .spatial-page *::before, .spatial-page *::after { animation: none !important; scroll-behavior: auto !important; transition: none !important; }
 }
+
+/* Reading rhythm shared within this case, independent of site styles. */
+.case-content{min-width:0}.case-content section{min-width:0}
+h1,h2,h3{overflow-wrap:anywhere}h2{line-height:1.2}
+.roadmap-note{font:12px/1.8 "Microsoft YaHei",sans-serif;letter-spacing:normal;opacity:.8;margin:0 0 28px;padding-bottom:12px;border-bottom:1px solid currentColor}
+@media(max-width:900px){h1{letter-spacing:-.045em} .case-content{max-width:100%}}
+.hero-title h1{line-height:1.08}.hero-stage{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;min-height:0;padding-bottom:30px}.hero-title{width:auto}.hero-stage figure{position:relative;top:auto;right:auto;width:95%;box-shadow:14px 18px 0 #c7ff86}.hero-index{display:none}@media(max-width:900px){.hero-stage{grid-template-columns:1fr;margin-top:40px;gap:35px}.hero-title h1{font-size:52px}.hero-stage figure{width:92%;margin:0 auto;transform:rotate(1deg);box-shadow:9px 12px 0 #c7ff86}.frame-note-a{left:-10px}.frame-note-b{right:-8px}.spatial-hero{padding-bottom:55px}}
 </style>

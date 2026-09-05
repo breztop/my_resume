@@ -1,24 +1,25 @@
 <script setup>
+import ProjectImage from "../components/ProjectImage.vue";
+import ProjectByline from "../components/ProjectByline.vue";
 defineProps({
   project: { type: Object, required: true },
-  previousProject: { type: Object, default: null },
-  nextProject: { type: Object, default: null },
 });
 </script>
 
 <template>
   <article class="defense-page">
     <header class="command-header">
-      <RouterLink to="/projects" class="command-back">[ ESC ] RETURN TO ARCHIVE</RouterLink>
+      <RouterLink to="/projects" class="command-back">← 全部作品</RouterLink>
       <div class="command-state"><i /> SIMULATION ONLINE</div>
       <span>BUILD {{ project.year }}.{{ project.number }}</span>
     </header>
 
-    <main>
+    <div class="case-content">
       <section class="battle-hero">
         <div class="hero-copy">
           <p>{{ project.kicker }}</p>
           <h1>{{ project.title }}</h1>
+          <ProjectByline :project="project" />
           <span>{{ project.subtitle }}</span>
           <div class="summary-log">
             <b>MISSION BRIEF</b>
@@ -29,7 +30,7 @@ defineProps({
         <figure class="battle-map">
           <div class="map-coordinates map-x">X 012 — 086</div>
           <div class="map-coordinates map-y">Y 441 — 792</div>
-          <img :src="project.cover" :alt="project.coverAlt" />
+          <ProjectImage :project="project" priority />
           <span class="target target-a" aria-hidden="true"><i /></span>
           <span class="target target-b" aria-hidden="true"><i /></span>
           <span class="target target-c" aria-hidden="true"><i /></span>
@@ -78,13 +79,9 @@ defineProps({
           </li>
         </ol>
       </section>
-    </main>
+    </div>
 
-    <footer class="command-footer">
-      <RouterLink v-if="previousProject" :to="`/projects/${previousProject.id}`"><small>← PREVIOUS MISSION</small><strong>{{ previousProject.title }}</strong></RouterLink>
-      <RouterLink to="/projects" class="mission-grid" aria-label="全部项目"><i v-for="n in 9" :key="n" /></RouterLink>
-      <RouterLink v-if="nextProject" :to="`/projects/${nextProject.id}`"><small>NEXT MISSION →</small><strong>{{ nextProject.title }}</strong></RouterLink>
-    </footer>
+
   </article>
 </template>
 
@@ -116,7 +113,7 @@ defineProps({
 .command-state { display: flex; align-items: center; gap: 9px; color: var(--signal); }
 .command-state i { width: 6px; height: 6px; background: currentColor; box-shadow: 0 0 12px currentColor; animation: state 1.2s steps(2) infinite; }
 
-main { overflow: hidden; }
+.case-content { overflow: hidden; }
 .battle-hero {
   position: relative;
   display: grid;
@@ -131,7 +128,7 @@ main { overflow: hidden; }
 }
 .hero-copy { position: relative; z-index: 2; align-self: center; }
 .hero-copy > p { margin: 0 0 26px; color: var(--signal); font-size: 10px; font-weight: 700; letter-spacing: .24em; }
-.hero-copy h1 { margin: 0; font-family: Impact, "Arial Narrow", sans-serif; font-size: clamp(72px, 9vw, 136px); font-weight: 900; line-height: .82; letter-spacing: -.04em; text-transform: uppercase; }
+.hero-copy h1 { margin: 0; font-family: Impact, "Arial Narrow", sans-serif; font-size: clamp(72px, 9vw, 136px); font-weight: 900; line-height:1.1; letter-spacing: -.04em; text-transform: uppercase; }
 .hero-copy > span { display: block; margin-top: 28px; color: #a9b3a7; font: 700 15px/1.6 Arial, sans-serif; }
 .summary-log { max-width: 560px; margin-top: 70px; padding: 24px 28px; border-left: 3px solid var(--signal); background: #121813dd; box-shadow: 18px 18px 0 #000; }
 .summary-log b { color: var(--signal); font-size: 9px; letter-spacing: .2em; }
@@ -169,7 +166,7 @@ main { overflow: hidden; }
 @keyframes state { 50% { opacity: .25; } }
 @keyframes lock { 50% { transform: scale(1.25); opacity: .45; } }
 
-@media (max-width: 700px) {
+@media (max-width:900px) {
   .command-header { grid-template-columns: 1fr auto; height: 64px; }.command-state { display: none; }
   .battle-hero { grid-template-columns: 1fr; min-height: 0; padding: 76px 18px 80px; }.hero-copy h1 { font-size: 68px; }.summary-log { margin-top: 44px; }.battle-map { margin: 0 10px; transform: none; }.wave-counter { display: none; }
   .system-readout { grid-template-columns: 1fr; padding: 0 18px 70px; }.system-readout article { min-height: auto; border-right: 1px solid #3d493e; border-bottom: 0; }.system-readout article:last-child { border-bottom: 1px solid #3d493e; }
@@ -181,4 +178,11 @@ main { overflow: hidden; }
 @media (prefers-reduced-motion: reduce) {
   .defense-page *, .defense-page *::before, .defense-page *::after { animation: none !important; transition: none !important; }
 }
+
+/* Reading rhythm shared within this case, independent of site styles. */
+.case-content{min-width:0}.case-content section{min-width:0}
+h1,h2,h3{overflow-wrap:anywhere}h2{line-height:1.2}
+.roadmap-note{font:12px/1.8 "Microsoft YaHei",sans-serif;letter-spacing:normal;opacity:.8;margin:0 0 28px;padding-bottom:12px;border-bottom:1px solid currentColor}
+@media(max-width:900px){h1{letter-spacing:-.045em} .case-content{max-width:100%}}
+@media(max-width:900px){.battle-hero h1{font-size:48px;line-height:1.15}}
 </style>

@@ -1,24 +1,25 @@
 <script setup>
+import ProjectImage from "../components/ProjectImage.vue";
+import ProjectByline from "../components/ProjectByline.vue";
 defineProps({
   project: { type: Object, required: true },
-  previousProject: { type: Object, default: null },
-  nextProject: { type: Object, default: null },
 });
 </script>
 
 <template>
   <article class="narrative-page">
     <header class="novel-hero">
-      <img class="hero-backdrop" :src="project.cover" :alt="project.coverAlt" />
+      <ProjectImage class="hero-backdrop" :project="project" priority />
       <div class="film-grain" aria-hidden="true" />
       <nav>
-        <RouterLink to="/projects">← Library</RouterLink>
+        <RouterLink to="/projects">← 全部作品</RouterLink>
         <span>Chapter {{ project.number }}</span>
         <span>{{ project.year }} / {{ project.visualLabel }}</span>
       </nav>
       <div class="title-card">
         <p>{{ project.kicker }}</p>
         <h1>{{ project.title }}</h1>
+          <ProjectByline :project="project" />
         <span>{{ project.subtitle }}</span>
       </div>
       <div class="dialogue-box">
@@ -29,9 +30,9 @@ defineProps({
       <span class="scene-count">SCENE 01 / 06</span>
     </header>
 
-    <main>
+    <div class="case-content">
       <section class="credits-strip">
-        <div><span>Written & directed by</span><p>{{ project.role }}</p></div>
+        <div><span>我的职责</span><p>{{ project.role }}</p></div>
         <div><span>Production tools</span><p>{{ project.stack.join(" · ") }}</p></div>
       </section>
 
@@ -93,13 +94,9 @@ defineProps({
           <li v-for="(principle, index) in project.principles" :key="principle"><span>{{ String(index + 1).padStart(2, "0") }}</span><p>{{ principle }}</p></li>
         </ol>
       </section>
-    </main>
+    </div>
 
-    <footer class="novel-footer">
-      <RouterLink v-if="previousProject" :to="`/projects/${previousProject.id}`"><small>← Previous chapter</small><strong>{{ previousProject.title }}</strong></RouterLink>
-      <RouterLink to="/projects" class="title-screen">TITLE SCREEN</RouterLink>
-      <RouterLink v-if="nextProject" :to="`/projects/${nextProject.id}`"><small>Next chapter →</small><strong>{{ nextProject.title }}</strong></RouterLink>
-    </footer>
+
   </article>
 </template>
 
@@ -118,12 +115,12 @@ defineProps({
 .novel-hero::before { position: absolute; inset: 0; z-index: -2; content: ""; background: linear-gradient(90deg, #0a0914cc, transparent 56%, #0d0b15aa), linear-gradient(0deg, #0c0b16 0, transparent 48%, #0c0b1688); }
 .film-grain { position: absolute; inset: 0; z-index: -1; opacity: .18; background-image: radial-gradient(#fff 0 .6px, transparent .7px), radial-gradient(#000 0 .8px, transparent .9px); background-position: 0 0, 7px 11px; background-size: 13px 13px, 17px 17px; mix-blend-mode: overlay; }
 .novel-hero nav { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; height: 84px; margin: 0 clamp(20px, 5vw, 78px); border-bottom: 1px solid #ffffff3d; font-family: Arial, sans-serif; font-size: 9px; letter-spacing: .17em; text-transform: uppercase; }.novel-hero nav a { color: inherit; text-decoration: none; }.novel-hero nav span:last-child { text-align: right; }
-.title-card { position: absolute; top: 18%; left: clamp(20px, 8vw, 130px); max-width: 850px; }.title-card p { margin: 0 0 24px; color: #edb4cb; font: 600 10px Arial, sans-serif; letter-spacing: .27em; }.title-card h1 { margin: 0; font-size: clamp(69px, 10vw, 145px); font-weight: 400; line-height: .87; letter-spacing: -.06em; text-shadow: 0 8px 40px #000; }.title-card > span { display: block; max-width: 580px; margin: 34px 0 0 10vw; font-size: clamp(16px, 1.6vw, 23px); font-style: italic; line-height: 1.5; }
+.title-card { position: absolute; top: 18%; left: clamp(20px, 8vw, 130px); max-width: 850px; }.title-card p { margin: 0 0 24px; color: #edb4cb; font: 600 10px Arial, sans-serif; letter-spacing: .27em; }.title-card h1 { margin: 0; font-size: clamp(69px, 10vw, 145px); font-weight: 400; line-height:1.1; letter-spacing: -.06em; text-shadow: 0 8px 40px #000; }.title-card > span { display: block; max-width: 580px; margin: 34px 0 0 10vw; font-size: clamp(16px, 1.6vw, 23px); font-style: italic; line-height: 1.5; }
 .dialogue-box { position: absolute; right: clamp(20px, 7vw, 110px); bottom: 95px; width: min(720px, 65vw); padding: 36px 42px; border: 1px solid #e6d8e366; border-radius: 4px; background: #13111fd9; box-shadow: 0 22px 70px #000a; backdrop-filter: blur(12px); }.speaker { position: absolute; top: -15px; left: 30px; padding: 8px 18px; color: white; background: var(--violet); font: 700 9px Arial, sans-serif; letter-spacing: .19em; }.dialogue-box p { margin: 0; font-size: 17px; line-height: 1.9; }.dialogue-box i { position: absolute; right: 20px; bottom: 14px; color: var(--rose); font-size: 10px; animation: next 1.2s ease-in-out infinite; }.scene-count { position: absolute; left: clamp(20px, 5vw, 78px); bottom: 105px; font: 700 9px Arial, sans-serif; letter-spacing: .2em; writing-mode: vertical-rl; }
 
 .credits-strip { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; padding: 1px clamp(20px, 6vw, 95px); background: #524a5e; }.credits-strip div { padding: 40px; background: #f0eaed; color: #251f2b; }.credits-strip span { color: #8d7487; font: 700 9px Arial, sans-serif; letter-spacing: .17em; text-transform: uppercase; }.credits-strip p { margin: 13px 0 0; font: 13px/1.7 Arial, sans-serif; }
 
-.story-conflict { display: grid; grid-template-columns: 130px 1.2fr .8fr; gap: 6vw; padding: 160px clamp(20px, 7vw, 110px); color: #29212e; background: #eee7e9; }.story-conflict aside { display: flex; flex-direction: column; align-items: center; gap: 26px; padding-top: 10px; border-right: 1px solid #9b8993; }.story-conflict aside span { font: 700 9px Arial, sans-serif; letter-spacing: .16em; writing-mode: vertical-rl; }.story-conflict aside b { color: #9a5271; font-size: 48px; font-weight: 400; writing-mode: vertical-rl; }.story-conflict aside i { width: 1px; height: 90px; background: #9b8993; }.scene-label { margin: 0 0 28px !important; color: #9a5271 !important; font: 700 9px Arial, sans-serif !important; letter-spacing: .2em; }.story-conflict h2,.story-solution h2 { margin: 0 0 42px; font-size: clamp(48px, 6vw, 84px); font-weight: 400; line-height: 1.02; letter-spacing: -.05em; }.story-conflict article > p:last-child { max-width: 760px; margin: 0; color: #5f5360; font: 15px/2 Arial, sans-serif; }.story-conflict blockquote { align-self: end; margin: 0 0 25px; padding: 35px 0 35px 30px; border-left: 3px solid var(--rose); color: #725c6e; font-size: 25px; font-style: italic; line-height: 1.65; }
+.story-conflict { display: grid; grid-template-columns: 130px 1.2fr .8fr; gap: 6vw; padding: 160px clamp(20px, 7vw, 110px); color: #29212e; background: #eee7e9; }.story-conflict aside { display: flex; flex-direction: column; align-items: center; gap: 26px; padding-top: 10px; border-right: 1px solid #9b8993; }.story-conflict aside span { font: 700 9px Arial, sans-serif; letter-spacing: .16em; writing-mode: vertical-rl; }.story-conflict aside b { color: #9a5271; font-size: 48px; font-weight: 400; writing-mode: vertical-rl; }.story-conflict aside i { width: 1px; height: 90px; background: #9b8993; }.scene-label { margin: 0 0 28px !important; color: #9a5271 !important; font: 700 9px Arial, sans-serif !important; letter-spacing: .2em; }.story-conflict h2,.story-solution h2 { margin: 0 0 42px; font-size: clamp(48px, 6vw, 84px); font-weight: 400; line-height: 1.02; letter-spacing: -.05em; }.story-conflict article > p:last-child { max-width:900px; margin: 0; color: #5f5360; font: 15px/2 Arial, sans-serif; }.story-conflict blockquote { align-self: end; margin: 0 0 25px; padding: 35px 0 35px 30px; border-left: 3px solid var(--rose); color: #725c6e; font-size: 25px; font-style: italic; line-height: 1.65; }
 
 .story-solution { position: relative; display: grid; grid-template-columns: 1fr .9fr; gap: 9vw; padding: 160px clamp(20px, 8vw, 130px); overflow: hidden; background: #5c3f6e; }.chapter-number { position: absolute; top: -80px; right: 3vw; color: #ffffff0d; font-size: 410px; line-height: 1; }.solution-copy { position: relative; z-index: 2; }.story-solution .scene-label { color: #e9aac5 !important; }.story-solution h2 { color: #fff; }.solution-copy > p:last-child { max-width: 730px; margin: 0; color: #ded0e1; font: 15px/2 Arial, sans-serif; }.save-slots { position: relative; z-index: 2; align-self: center; display: grid; gap: 13px; }.save-slots article { display: grid; grid-template-columns: 55px 1fr auto; align-items: center; gap: 20px; min-height: 88px; padding: 18px 24px; border: 1px solid #eadde377; background: #291f31aa; box-shadow: 10px 10px 0 #3e2b4b; }.save-slots span { display: grid; place-items: center; width: 43px; height: 43px; border: 1px solid #b88ba3; color: var(--rose); font: 700 9px Arial, sans-serif; }.save-slots b { font-size: 17px; font-weight: 400; }.save-slots small { color: #a999ad; font: 9px Arial, sans-serif; }
 
@@ -136,7 +133,7 @@ defineProps({
 .novel-footer { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 30px; padding: 70px clamp(20px, 6vw, 95px); }.novel-footer > a:not(.title-screen) { display: flex; flex-direction: column; gap: 9px; color: inherit; text-decoration: none; }.novel-footer > a:last-child { text-align: right; }.novel-footer small { color: #746b7b; font: 9px Arial, sans-serif; letter-spacing: .13em; }.novel-footer strong { font-size: 17px; font-weight: 400; }.title-screen { padding: 12px 22px; border: 1px solid #6b6070; color: inherit; font: 9px Arial, sans-serif; letter-spacing: .17em; text-decoration: none; }
 
 @keyframes slow-scene { from { transform: scale(1.1); } to { transform: scale(1.02); } } @keyframes next { 50% { transform: translateY(5px); opacity: .4; } } @keyframes path { to { stroke-dashoffset: -140; } }
-@media (max-width: 700px) {
+@media (max-width:900px) {
   .novel-hero { min-height: 850px; }.novel-hero nav { grid-template-columns: 1fr auto; height: 68px; margin: 0 18px; }.novel-hero nav span:last-child { display: none; }.title-card { top: 17%; left: 18px; right: 18px; }.title-card h1 { font-size: 63px; }.title-card > span { margin: 26px 0 0; font-size: 16px; }.dialogue-box { right: 18px; bottom: 65px; width: calc(100% - 36px); padding: 32px 24px 25px; box-sizing: border-box; }.dialogue-box p { font-size: 14px; }.scene-count { display: none; }
   .credits-strip { grid-template-columns: 1fr; padding: 1px 18px; }
   .story-conflict { grid-template-columns: 1fr; padding: 90px 18px; }.story-conflict aside { display: none; }.story-conflict h2,.story-solution h2 { font-size: 45px; }.story-conflict blockquote { margin-top: 25px; font-size: 21px; }
@@ -147,4 +144,11 @@ defineProps({
   .novel-footer { grid-template-columns: 1fr 1fr; padding: 50px 18px; }.title-screen { display: none; }
 }
 @media (prefers-reduced-motion: reduce) { .narrative-page *, .narrative-page *::before, .narrative-page *::after { animation: none !important; transition: none !important; } }
+
+/* Reading rhythm shared within this case, independent of site styles. */
+.case-content{min-width:0}.case-content section{min-width:0}
+h1,h2,h3{overflow-wrap:anywhere}h2{line-height:1.2}
+.roadmap-note{font:12px/1.8 "Microsoft YaHei",sans-serif;letter-spacing:normal;opacity:.8;margin:0 0 28px;padding-bottom:12px;border-bottom:1px solid currentColor}
+@media(max-width:900px){h1{letter-spacing:-.045em} .case-content{max-width:100%}}
+@media(max-width:900px){.title-block h1{line-height:1.15}}
 </style>

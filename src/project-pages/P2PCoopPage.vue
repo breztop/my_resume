@@ -1,8 +1,8 @@
 <script setup>
+import ProjectImage from "../components/ProjectImage.vue";
+import ProjectByline from "../components/ProjectByline.vue";
 defineProps({
   project: { type: Object, required: true },
-  previousProject: { type: Object, default: null },
-  nextProject: { type: Object, default: null },
 });
 </script>
 
@@ -10,7 +10,7 @@ defineProps({
   <article class="coop-page">
     <header class="coop-hero">
       <nav class="coop-topbar" aria-label="项目导航">
-        <RouterLink to="/projects" class="back-link">← PROJECT INDEX</RouterLink>
+        <RouterLink to="/projects" class="back-link">← 全部作品</RouterLink>
         <span class="connection"><i /> PEER CONNECTION ACTIVE</span>
         <span>{{ project.number }} / {{ project.year }}</span>
       </nav>
@@ -21,12 +21,13 @@ defineProps({
       <div class="hero-copy">
         <p>{{ project.kicker }}</p>
         <h1>{{ project.title }}</h1>
+          <ProjectByline :project="project" />
         <strong>{{ project.subtitle }}</strong>
       </div>
 
       <figure class="portal-frame">
         <div class="portal-ring" aria-hidden="true" />
-        <img :src="project.cover" :alt="project.coverAlt" />
+        <ProjectImage :project="project" priority />
         <figcaption>
           <span>PEER 01 — FIRE</span>
           <b>↔</b>
@@ -37,7 +38,7 @@ defineProps({
       <p class="hero-summary">{{ project.summary }}</p>
     </header>
 
-    <main>
+    <div class="case-content">
       <section class="link-strip" aria-label="项目角色与技术栈">
         <div><span>ROLE / OWNERSHIP</span><p>{{ project.role }}</p></div>
         <div class="packet" aria-hidden="true"><i /><i /><i /><i /><i /></div>
@@ -71,18 +72,9 @@ defineProps({
           </li>
         </ol>
       </section>
-    </main>
+    </div>
 
-    <footer class="coop-footer">
-      <RouterLink v-if="previousProject" :to="`/projects/${previousProject.id}`">
-        <span>← PREVIOUS PEER</span><strong>{{ previousProject.title }}</strong>
-      </RouterLink>
-      <span v-else />
-      <div class="footer-mark" aria-hidden="true"><i /><b>CO-OP</b><i /></div>
-      <RouterLink v-if="nextProject" :to="`/projects/${nextProject.id}`">
-        <span>NEXT PEER →</span><strong>{{ nextProject.title }}</strong>
-      </RouterLink>
-    </footer>
+
   </article>
 </template>
 
@@ -158,7 +150,7 @@ defineProps({
 
 .hero-copy { position: relative; z-index: 2; padding: 76px 0 24px; text-align: center; }
 .hero-copy p { margin: 0 0 15px; color: #9eabc0; font: 700 12px ui-monospace, monospace; letter-spacing: .35em; }
-.hero-copy h1 { margin: 0; font-size: clamp(70px, 11vw, 154px); line-height: .78; letter-spacing: -.08em; text-transform: uppercase; }
+.hero-copy h1 { margin: 0; font-size: clamp(70px, 11vw, 154px); line-height:1.1; letter-spacing: -.08em; text-transform: uppercase; }
 .hero-copy strong { display: block; margin-top: 30px; color: #b9c4d4; font-size: clamp(14px, 1.7vw, 22px); font-weight: 450; letter-spacing: .06em; }
 
 .portal-frame { position: relative; width: min(940px, 76vw); margin: 54px auto 0; }
@@ -171,7 +163,7 @@ defineProps({
 .portal-frame figcaption b { color: #eefcff; }
 .hero-summary { max-width: 680px; margin: 40px auto 0; color: #bac6d7; font-size: 16px; line-height: 1.9; text-align: center; }
 
-main { max-width: 1280px; margin: 0 auto; padding: 0 28px; }
+.case-content { max-width: 1280px; margin: 0 auto; padding: 0 28px; }
 .link-strip { display: grid; grid-template-columns: 1fr 190px 1fr; align-items: center; gap: 34px; padding: 65px 0; border-top: 1px solid #1d2637; border-bottom: 1px solid #1d2637; }
 .link-strip > div:last-child { text-align: right; }
 .link-strip span, .dual-case article > span, .sync-map header p { color: #66748b; font: 700 10px ui-monospace, monospace; letter-spacing: .22em; }
@@ -212,13 +204,13 @@ main { max-width: 1280px; margin: 0 auto; padding: 0 28px; }
 @keyframes packet { 50% { background: var(--fire); box-shadow: 0 0 10px var(--fire); } }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-@media (max-width: 700px) {
+@media (max-width:900px) {
   .coop-hero { min-height: auto; padding: 0 18px 70px; }
   .coop-topbar { grid-template-columns: 1fr auto; height: 70px; }.connection { display: none; }
   .hero-copy { padding-top: 60px; }.hero-copy h1 { font-size: 68px; }.hero-copy strong { line-height: 1.5; }
   .portal-frame { width: 100%; margin-top: 36px; }.portal-frame figcaption { gap: 8px; font-size: 8px; }.portal-ring { inset: -8px; }
   .hero-summary { font-size: 14px; text-align: left; }
-  main { padding: 0 18px; }.link-strip { grid-template-columns: 1fr; gap: 24px; padding: 42px 0; }.link-strip > div:last-child { text-align: left; }.packet { display: none; }
+  .case-content { padding: 0 18px; }.link-strip { grid-template-columns: 1fr; gap: 24px; padding: 42px 0; }.link-strip > div:last-child { text-align: left; }.packet { display: none; }
   .dual-case { grid-template-columns: 1fr; gap: 70px; padding: 84px 0; }.dual-case .case-water { text-align: left; }.sync-core { display: none; }.dual-case h2 { font-size: 42px; }
   .sync-map { padding: 62px 18px 18px; margin: 0 0 80px; border-radius: 20px; }.sync-map header { grid-template-columns: 1fr; margin-bottom: 38px; }.sync-map ol { grid-template-columns: 1fr; }.sync-map li { min-height: 145px; }.sync-map li p { margin-top: 28px; }
   .coop-footer { grid-template-columns: 1fr 1fr; padding: 0 18px 48px; }.footer-mark { display: none; }
@@ -227,4 +219,11 @@ main { max-width: 1280px; margin: 0 auto; padding: 0 28px; }
 @media (prefers-reduced-motion: reduce) {
   .coop-page *, .coop-page *::before, .coop-page *::after { animation: none !important; scroll-behavior: auto !important; }
 }
+
+/* Reading rhythm shared within this case, independent of site styles. */
+.case-content{min-width:0}.case-content section{min-width:0}
+h1,h2,h3{overflow-wrap:anywhere}h2{line-height:1.2}
+.roadmap-note{font:12px/1.8 "Microsoft YaHei",sans-serif;letter-spacing:normal;opacity:.8;margin:0 0 28px;padding-bottom:12px;border-bottom:1px solid currentColor}
+@media(max-width:900px){h1{letter-spacing:-.045em} .case-content{max-width:100%}}
+.hero-copy :deep(.project-byline){margin-inline:auto;text-align:center}.hero-copy :deep(.project-byline ul){justify-content:center}
 </style>

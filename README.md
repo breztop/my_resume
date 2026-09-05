@@ -1,6 +1,6 @@
-# Game Developer Portfolio
+# DEV / WORKS · 独立开发者作品站
 
-一个以项目案例为核心的 Vue 作品集。视觉采用“编辑式排版 + 项目概念图”，概念图用于建立项目气氛，项目文字负责说明真实的工程工作。
+一个以项目案例为核心的 Vue 作品集。首页采用暖白底、作品拼贴和彩色标签，展示游戏、网络系统与工具；15 个详情页保留各自独立的视觉表达。概念图用于建立项目气氛，项目文字负责说明工程工作。
 
 ## 项目一览
 
@@ -48,26 +48,43 @@ src/data/projects.js ──► HomeView / ProjectsView
 - `src/router.js`：定义主页、项目库和项目详情路由，并负责页面滚动位置。
 - `src/data/projects.js`：项目内容的唯一数据源；新增项目主要修改这里。
 - `src/views/HomeView.vue`：主页与精选项目。
-- `src/views/ProjectsView.vue`：带一层分类的响应式项目库。
-- `src/views/ProjectDetailView.vue`：只负责查找项目并分发独立页面组件。
+- `src/views/ProjectsView.vue`：分类与关键词联合筛选的响应式项目库，分类保存在 sessionStorage。
+- `src/views/ProjectDetailView.vue`：查找项目、分发独立页面组件，并提供统一的关联项目与前后导航。
 - `src/project-pages/`：每个项目自己的页面结构、样式与响应式实现。
-- `src/components/ProjectCard.vue`：主页精选项目的封面、摘要和详情入口。
+- `src/components/ProjectCard.vue`：首页与项目集共用的作品卡片。
 - `server/index.js`：静态资源服务和 SPA 路由回退，保证详情页刷新不出现 404。
-- `src/style.css`：全局视觉令牌、页面布局、组件样式与响应式规则。
-- `public/images/projects/`：页面实际加载的 WebP 文件。
+- `src/style.css`：全局视觉令牌、基础元素与共享按钮样式；页面布局使用局部样式。
+- `public/images/projects/`：原始封面与生成的 640 / 1280 像素 WebP 变体，SVG 原样保留。
 - `artwork/source/`：保留高质量 PNG 源文件，不参与站点构建。
 
 ## 新增项目
 
 1. 将 3:2 图片放入 `public/images/projects/`，优先使用 WebP。
 2. 在 `src/data/projects.js` 增加一个项目对象，并提供准确的 `coverAlt`；界面或架构图可设置 `mediaFit: "contain"`。
-3. 用 `category` 将项目归入 `client`、`server` 或 `tooling`；需要在主页展示时设置 `featured: true`。
+3. 用 `category` 将项目归入 `client`、`server` 或 `tooling`；主页的六个精选项目由同文件中的 `featuredProjectIds` 显式排序，旧 `featured` 字段不再控制首页。
 4. 同一系统的多个实现使用相同的 `system`，并在 `relatedProjectIds` 中互相填写项目 id，即可生成关联入口。
-5. 项目可选提供 `modules`、`roadmap` 和 `principles`，详情页会自动生成信息架构、阶段规划与设计约束。
+5. 项目可选提供 `modules`、`roadmap` 和 `principles`，由该项目的独立详情组件决定具体呈现，路线图应与已有能力分开。
 6. 在 `src/project-pages/` 创建该项目的独立页面，并在 `projectPageRegistry.js` 注册；不需要修改路由。
 
 ## 图片说明
 
-当前三张图片是生成的基础概念视觉，不是实际游戏截图，因此界面中明确标记为 `CONCEPT VISUAL`。上线作品集时，建议在每个详情中继续补充真实截图、录屏和可验证的项目结果。
+现有封面包含概念视觉与界面示意，不能将它们当作实机截图或性能证明。图片描述由 `coverAlt` 提供；页面中的示意性仪表与流程不代表运行中的设备或实时测量结果。
 
 完整生成提示词见 [`docs/image-prompts.md`](docs/image-prompts.md)。
+
+
+## 本地开发与验收
+
+```sh
+npm run dev
+node scripts/check-projects.mjs
+npm run build
+npm run preview -- --host 127.0.0.1 --port 5174
+```
+
+- `python scripts/optimize-images.py`：需要 Pillow，生成封面变体及 `src/data/projectImages.json`，保留原始资源。更新封面后重新运行。
+- `node scripts/check-browser.mjs`：需要可用的 Playwright 模块和本机 Chrome；默认访问 `http://127.0.0.1:5173`。可用 `PLAYWRIGHT_MODULE_PATH` 指定已有模块路径，用 `PORTFOLIO_BASE_URL` 指定生产预览地址。
+- 浏览器检查输出默认位于 `artifacts/portfolio-qa/`，可通过 `PORTFOLIO_QA_DIR` 改写。包含 18 个路由 × 3 种屏宽的截图、布局报告与 20 项交互结果。
+- 检查包括图片加载、唯一主内容区域与主标题、横向溢出、搜索与分类组合、刷新和返回、关联项目、锚点、键盘、触屏与存储不可用场景。
+
+2026-09-05 重构验收：生产构建通过，54 组页面／屏宽检查和 20 项交互检查通过。测试使用本机无头 Chrome，未进行线上发布；跨浏览器与真实手机硬件表现不属于这次验证结果。

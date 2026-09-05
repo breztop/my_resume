@@ -1,3 +1,7 @@
+import projectImages from './projectImages.json' with { type: 'json' };
+
+export const featuredProjectIds = ['p2p', 'tower', 'cards', 'breconn', 'face-scan', 'conutline'];
+
 export const projects = [
   {
     id: "p2p",
@@ -691,6 +695,12 @@ export const projects = [
     ],
   },
 ];
+
+for (const project of projects) {
+  project.image = projectImages[project.cover];
+  if (project.id === 'tribal-war') project.displayTitle = '部落战 · 3D';
+  if (project.id === 'tribal-war-2d') project.displayTitle = '部落战 · 2D';
+}
 
 export const projectCategories = [
   {

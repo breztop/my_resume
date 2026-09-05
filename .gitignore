@@ -3,3 +3,4 @@ dist/
 artwork/source/
 npm-debug.log*
 .DS_Store
+artifacts/portfolio-qa/

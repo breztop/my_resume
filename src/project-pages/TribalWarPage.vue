@@ -1,8 +1,8 @@
 <script setup>
+import ProjectImage from "../components/ProjectImage.vue";
+import ProjectByline from "../components/ProjectByline.vue";
 defineProps({
   project: { type: Object, required: true },
-  previousProject: { type: Object, default: null },
-  nextProject: { type: Object, default: null },
 });
 </script>
 
@@ -10,7 +10,7 @@ defineProps({
   <article class="war-page">
     <header class="war-hero">
       <nav>
-        <RouterLink to="/projects">← 返回项目营地</RouterLink>
+        <RouterLink to="/projects">← 全部作品</RouterLink>
         <span>战役卷宗 {{ project.number }} · {{ project.year }}</span>
       </nav>
 
@@ -18,11 +18,12 @@ defineProps({
       <div class="hero-copy">
         <p>{{ project.kicker }}</p>
         <h1>{{ project.title }}</h1>
+          <ProjectByline :project="project" />
         <h2>{{ project.subtitle }}</h2>
       </div>
 
       <figure class="war-map">
-        <img :src="project.cover" :alt="project.coverAlt" />
+        <ProjectImage :project="project" priority />
         <figcaption><span>FIELD RECORD / {{ project.visualLabel }}</span><b>争夺核心</b></figcaption>
       </figure>
 
@@ -32,7 +33,7 @@ defineProps({
       </div>
     </header>
 
-    <main>
+    <div class="case-content">
       <section class="war-meta">
         <div><span>统筹职责</span><p>{{ project.role }}</p></div>
         <div><span>战术工具</span><p>{{ project.stack.join(" · ") }}</p></div>
@@ -79,6 +80,7 @@ defineProps({
       </section>
 
       <section v-if="project.roadmap?.length" class="campaign-route">
+        <p class="roadmap-note">后续演进 · 以下为路线图，具体阶段以项目说明为准。</p>
         <header><span>第四卷 / 行军路线</span><h2>从一场交锋，推进到一场战役。</h2></header>
         <div class="route">
           <article v-for="(phase, index) in project.roadmap" :key="phase.label">
@@ -96,13 +98,9 @@ defineProps({
           <li v-for="(principle, index) in project.principles" :key="principle"><span>其 {{ index + 1 }}</span><p>{{ principle }}</p></li>
         </ol>
       </section>
-    </main>
+    </div>
 
-    <footer class="war-footer">
-      <RouterLink v-if="previousProject" :to="`/projects/${previousProject.id}`"><small>← 上一份卷宗</small><strong>{{ previousProject.title }}</strong></RouterLink>
-      <RouterLink to="/projects" class="camp-button">返回营地</RouterLink>
-      <RouterLink v-if="nextProject" :to="`/projects/${nextProject.id}`"><small>下一份卷宗 →</small><strong>{{ nextProject.title }}</strong></RouterLink>
-    </footer>
+
   </article>
 </template>
 
@@ -124,7 +122,7 @@ defineProps({
 .title-seal span { font-size: 47px; font-weight: 800; }
 .hero-copy { position: relative; z-index: 3; padding-top: 85px; }
 .hero-copy > p { margin: 0 0 20px; color: var(--blood); font: 700 10px ui-monospace, monospace; letter-spacing: .25em; }
-.hero-copy h1 { margin: 0; font-size: clamp(100px, 15vw, 220px); font-weight: 900; line-height: .72; letter-spacing: -.1em; }
+.hero-copy h1 { margin: 0; font-size: clamp(100px, 15vw, 220px); font-weight: 900; line-height:1.1; letter-spacing: -.1em; }
 .hero-copy h2 { max-width: 560px; margin: 42px 0 0 14vw; font-size: clamp(19px, 2vw, 30px); font-weight: 400; line-height: 1.45; }
 .war-map { position: relative; width: min(900px, 72vw); margin: 70px 0 0 auto; padding: 13px; background: #30281c; transform: rotate(-1.4deg); box-shadow: -44px 42px 0 #b49b6c; }
 .war-map::after { position: absolute; inset: 13px; content: ""; border: 1px solid #d7c49b88; box-shadow: inset 0 0 100px #1b120d; pointer-events: none; }
@@ -135,7 +133,7 @@ defineProps({
 .hero-summary span, .war-meta span, .report-body article > span { color: var(--blood); font-size: 11px; font-weight: 700; letter-spacing: .22em; }
 .hero-summary p { margin: 17px 0 0; font-size: 15px; line-height: 1.9; }
 
-main { overflow: hidden; background: var(--paper); }
+.case-content { overflow: hidden; background: var(--paper); }
 .war-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; padding: 0 clamp(20px, 6vw, 96px) 100px; background: #493c28; }
 .war-meta div { padding: 32px; background: #201a14; color: #ead9b5; }.war-meta span { color: #bd7c61; }.war-meta p { margin: 13px 0 0; font-size: 13px; line-height: 1.7; }
 
@@ -144,7 +142,7 @@ main { overflow: hidden; background: var(--paper); }
 .report-body { display: grid; grid-template-columns: 1fr 60px 1fr; gap: 6vw; align-items: center; }.report-body article { padding: 0 0 40px; border-bottom: 2px solid #332a1e; }.report-body article p { margin: 30px 0 0; font-size: 16px; line-height: 2; }.report-body > i { color: var(--blood); font-size: 66px; font-style: normal; text-align: center; }
 
 .battle-lines { padding: 130px clamp(20px, 6vw, 96px); color: #eadbbd; background: #211a14; }
-.battle-lines header { display: flex; justify-content: space-between; align-items: end; gap: 30px; padding-bottom: 50px; border-bottom: 1px solid #756348; }.battle-lines header > span { color: #c67d63; }.battle-lines h2 { max-width: 700px; margin: 0; font-size: clamp(42px, 5vw, 72px); line-height: 1; text-align: right; }
+.battle-lines header { display: flex; justify-content: space-between; align-items: end; gap: 30px; padding-bottom: 50px; border-bottom: 1px solid #756348; }.battle-lines header > span { color: #c67d63; }.battle-lines h2 { max-width:900px; margin: 0; font-size: clamp(42px, 5vw, 72px); line-height: 1; text-align: right; }
 .battle-lines ol { margin: 0; padding: 0; list-style: none; }.battle-lines li { display: grid; grid-template-columns: 120px 1fr; align-items: center; min-height: 115px; border-bottom: 1px solid #594b37; }.battle-lines li b { color: #9b8261; font: 400 28px Georgia, serif; }.battle-lines li p { max-width: 850px; margin: 0; font-size: 19px; line-height: 1.55; }.battle-lines li:hover p { color: #ffb097; }
 
 .formations { padding: 150px clamp(20px, 6vw, 96px); background: #c9b484; }
@@ -161,7 +159,7 @@ main { overflow: hidden; background: var(--paper); }
 
 .war-footer { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 30px; padding: 70px clamp(20px, 6vw, 96px); color: #decba5; background: #17130f; }.war-footer > a:not(.camp-button) { display: flex; flex-direction: column; gap: 8px; color: inherit; text-decoration: none; }.war-footer > a:last-child { text-align: right; }.war-footer small { color: #887860; font-size: 10px; }.war-footer strong { font-size: 17px; }.camp-button { padding: 13px 23px; border: 1px solid #8e7955; color: inherit; font-size: 12px; text-decoration: none; }
 
-@media (max-width: 700px) {
+@media (max-width:900px) {
   .war-hero { min-height: auto; padding: 0 18px 80px; }.war-hero nav { height: 70px; font-size: 9px; }.title-seal { top: 110px; right: 18px; width: 56px; height: 56px; }.title-seal span { font-size: 28px; }.hero-copy { padding-top: 68px; }.hero-copy h1 { font-size: 88px; }.hero-copy h2 { margin: 30px 0 0; font-size: 18px; }.war-map { width: calc(100% - 18px); margin-top: 55px; box-shadow: -18px 18px 0 #b49b6c; }.hero-summary { position: static; width: auto; margin-top: 60px; padding: 0; background: none; }
   .war-meta { grid-template-columns: 1fr; padding: 0 18px 75px; }
   .field-report { padding: 90px 18px; }.field-report > header { grid-template-columns: 1fr; }.field-report h2 { font-size: 52px; }.report-body { grid-template-columns: 1fr; }.report-body > i { transform: rotate(45deg); }
@@ -175,4 +173,11 @@ main { overflow: hidden; background: var(--paper); }
 @media (prefers-reduced-motion: reduce) {
   .war-page *, .war-page *::before, .war-page *::after { animation: none !important; transition: none !important; }
 }
+
+/* Reading rhythm shared within this case, independent of site styles. */
+.case-content{min-width:0}.case-content section{min-width:0}
+h1,h2,h3{overflow-wrap:anywhere}h2{line-height:1.2}
+.roadmap-note{font:12px/1.8 "Microsoft YaHei",sans-serif;letter-spacing:normal;opacity:.8;margin:0 0 28px;padding-bottom:12px;border-bottom:1px solid currentColor}
+@media(max-width:900px){h1{letter-spacing:-.045em} .case-content{max-width:100%}}
+
 </style>

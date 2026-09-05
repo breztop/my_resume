@@ -1,29 +1,30 @@
 <script setup>
+import ProjectImage from "../components/ProjectImage.vue";
+import ProjectByline from "../components/ProjectByline.vue";
 defineProps({
   project: { type: Object, required: true },
-  previousProject: { type: Object, default: null },
-  nextProject: { type: Object, default: null },
 });
 </script>
 
 <template>
   <article class="lane-page">
     <header class="game-hud">
-      <RouterLink to="/projects">◀ SELECT LEVEL</RouterLink>
+      <RouterLink to="/projects">← 全部作品</RouterLink>
       <div class="core-health"><span>CORE</span><i><b /></i><strong>100%</strong></div>
       <div class="hud-score">STAGE {{ project.number }} <span>{{ project.year }}</span></div>
     </header>
 
-    <main>
+    <div class="case-content">
       <section class="lane-hero">
         <div class="hero-sky" aria-hidden="true"><i /><i /><i /></div>
         <div class="hero-title">
           <p>{{ project.kicker }}</p>
           <h1>{{ project.title }}<sup>2D</sup></h1>
+          <ProjectByline :project="project" />
           <strong>{{ project.subtitle }}</strong>
         </div>
         <figure>
-          <img :src="project.cover" :alt="project.coverAlt" />
+          <ProjectImage :project="project" priority />
           <div class="battle-overlay" aria-hidden="true">
             <span class="camp camp-left">A</span><i class="lane-line" /><b class="energy-core">◆</b><span class="camp camp-right">B</span>
           </div>
@@ -84,6 +85,7 @@ defineProps({
       </section>
 
       <section v-if="project.roadmap?.length" class="level-select">
+        <p class="roadmap-note">后续演进 · 以下为路线图，具体阶段以项目说明为准。</p>
         <header><span>05 / CAMPAIGN</span><h2>选择下一张地图</h2></header>
         <div class="levels">
           <article v-for="(phase, index) in project.roadmap" :key="phase.label">
@@ -100,13 +102,9 @@ defineProps({
         <h2>胜利条件</h2>
         <ol><li v-for="(principle, index) in project.principles" :key="principle"><b>{{ index + 1 }}P</b><span>{{ principle }}</span></li></ol>
       </section>
-    </main>
+    </div>
 
-    <footer class="lane-footer">
-      <RouterLink v-if="previousProject" :to="`/projects/${previousProject.id}`"><small>◀ PREV STAGE</small><strong>{{ previousProject.title }}</strong></RouterLink>
-      <RouterLink to="/projects" class="continue">CONTINUE?</RouterLink>
-      <RouterLink v-if="nextProject" :to="`/projects/${nextProject.id}`"><small>NEXT STAGE ▶</small><strong>{{ nextProject.title }}</strong></RouterLink>
-    </footer>
+
   </article>
 </template>
 
@@ -125,10 +123,10 @@ defineProps({
 .game-hud a { color: var(--gold); text-decoration: none; }.hud-score { text-align: right; }.hud-score span { margin-left: 14px; color: #897b9c; }
 .core-health { display: flex; align-items: center; gap: 10px; color: #a89cb8; }.core-health i { display: block; width: 170px; height: 10px; padding: 2px; border: 1px solid white; background: #0f0a19; }.core-health b { display: block; width: 100%; height: 100%; background: repeating-linear-gradient(90deg, var(--pink) 0 14px, #ff86ab 14px 16px); animation: charge 2s steps(5) infinite; }.core-health strong { color: white; font-size: 9px; }
 
-main { overflow: hidden; }
+.case-content { overflow: hidden; }
 .lane-hero { position: relative; min-height: 900px; padding: 100px clamp(16px, 5vw, 78px) 110px; overflow: hidden; background: linear-gradient(#302054 0 62%, #1f1538 62% 69%, #100c1e 69%); }
 .hero-sky i { position: absolute; width: 4px; height: 4px; background: white; box-shadow: 13vw 8vh #fff, 25vw 2vh #79e4ff, 39vw 15vh #fff, 57vw 4vh #fff, 71vw 18vh #ffd85a, 84vw 7vh #fff, 92vw 23vh #fff; animation: twinkle 1.8s steps(2) infinite; }.hero-sky i:nth-child(2) { top: 80px; left: 9%; animation-delay: -.6s; }.hero-sky i:nth-child(3) { top: 190px; left: 3%; animation-delay: -1.1s; }
-.hero-title { position: relative; z-index: 3; max-width: 1300px; margin: 0 auto; text-align: center; }.hero-title p { margin: 0 0 18px; color: var(--cyan); font-size: 10px; font-weight: 800; letter-spacing: .25em; }.hero-title h1 { margin: 0; color: white; font-family: Impact, "Arial Black", sans-serif; font-size: clamp(85px, 13vw, 190px); line-height: .8; letter-spacing: -.04em; text-shadow: 7px 7px 0 #0d0917, -3px -3px 0 var(--pink); }.hero-title sup { display: inline-block; margin-left: 15px; color: var(--gold); font: 900 .25em "Courier New", monospace; letter-spacing: 0; text-shadow: 3px 3px 0 #0d0917; transform: translateY(-1.5em); }.hero-title strong { display: block; margin-top: 32px; color: #d3c9df; font-size: 14px; line-height: 1.5; }
+.hero-title { position: relative; z-index: 3; max-width: 1300px; margin: 0 auto; text-align: center; }.hero-title p { margin: 0 0 18px; color: var(--cyan); font-size: 10px; font-weight: 800; letter-spacing: .25em; }.hero-title h1 { margin: 0; color: white; font-family: Impact, "Arial Black", sans-serif; font-size: clamp(85px, 13vw, 190px); line-height:1.1; letter-spacing: -.04em; text-shadow: 7px 7px 0 #0d0917, -3px -3px 0 var(--pink); }.hero-title sup { display: inline-block; margin-left: 15px; color: var(--gold); font: 900 .25em "Courier New", monospace; letter-spacing: 0; text-shadow: 3px 3px 0 #0d0917; transform: translateY(-1.5em); }.hero-title strong { display: block; margin-top: 32px; color: #d3c9df; font-size: 14px; line-height: 1.5; }
 .lane-hero figure { position: relative; z-index: 3; width: min(1160px, 90vw); margin: 70px auto 0; border: 8px solid #0d0917; outline: 3px solid #7453a3; background: #0d0917; box-shadow: 18px 18px 0 #0a0711; }.lane-hero figure img { display: block; width: 100%; aspect-ratio: 16 / 7; object-fit: cover; filter: saturate(1.12) contrast(1.05); }.lane-hero figcaption { display: flex; justify-content: space-between; padding: 12px 9px 6px; color: #9a8baa; font-size: 8px; letter-spacing: .12em; }.lane-hero figcaption span:first-child { color: #68ffac; }
 .battle-overlay { position: absolute; inset: 0 0 32px; display: flex; align-items: center; padding: 0 4%; pointer-events: none; }.camp { display: grid; place-items: center; width: 38px; height: 50px; border: 3px solid white; color: white; background: #2e1b4d; font-weight: 900; box-shadow: 4px 4px 0 #0b0712; }.lane-line { flex: 1; height: 3px; background: repeating-linear-gradient(90deg, var(--gold) 0 9px, transparent 9px 15px); }.energy-core { display: grid; place-items: center; width: 58px; height: 58px; color: var(--cyan); border: 3px solid var(--cyan); background: #15102a; box-shadow: 0 0 24px #62efff99; animation: core 1.5s steps(4) infinite; }
 .press-start { margin-top: 75px; color: var(--gold); font-size: 10px; font-weight: 800; letter-spacing: .18em; text-align: center; animation: blink 1s steps(2) infinite; }
@@ -150,7 +148,7 @@ main { overflow: hidden; }
 .lane-footer { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 25px; padding: 65px clamp(16px, 5vw, 78px); background: #100a1c; }.lane-footer > a:not(.continue) { display: flex; flex-direction: column; gap: 7px; color: white; text-decoration: none; }.lane-footer > a:last-child { text-align: right; }.lane-footer small { color: #837493; font-size: 8px; letter-spacing: .14em; }.lane-footer strong { font: 700 14px Arial, sans-serif; }.continue { padding: 12px 18px; border: 3px solid var(--gold); color: var(--gold); font-size: 10px; font-weight: 900; text-decoration: none; animation: blink 1s steps(2) infinite; }
 
 @keyframes blink { 50% { opacity: .25; } } @keyframes twinkle { 50% { opacity: .2; } } @keyframes core { 50% { transform: scale(1.12) rotate(45deg); } } @keyframes charge { 50% { width: 92%; } }
-@media (max-width: 700px) {
+@media (max-width:900px) {
   .game-hud { grid-template-columns: 1fr auto; height: 62px; }.core-health { display: none; }
   .lane-hero { min-height: auto; padding: 75px 16px 80px; }.hero-title h1 { font-size: 70px; }.hero-title sup { margin-left: 7px; }.lane-hero figure { width: 100%; margin-top: 50px; border-width: 5px; }.battle-overlay { display: none; }.lane-hero figcaption span:last-child { display: none; }
   .player-card { grid-template-columns: 60px 1fr; gap: 18px; margin: -20px 16px 0; padding: 18px; transform: translateY(40%); }.portrait { width: 58px; height: 58px; }.player-card > div:not(.portrait) { padding-left: 15px; }.player-card > div:last-child { grid-column: 1 / -1; padding: 17px 0 0; border-left: 0; border-top: 1px dashed #6d5b82; }
@@ -163,4 +161,11 @@ main { overflow: hidden; }
   .lane-footer { grid-template-columns: 1fr 1fr; padding: 50px 18px; }.continue { display: none; }
 }
 @media (prefers-reduced-motion: reduce) { .lane-page *, .lane-page *::before, .lane-page *::after { animation: none !important; transition: none !important; } }
+
+/* Reading rhythm shared within this case, independent of site styles. */
+.case-content{min-width:0}.case-content section{min-width:0}
+h1,h2,h3{overflow-wrap:anywhere}h2{line-height:1.2}
+.roadmap-note{font:12px/1.8 "Microsoft YaHei",sans-serif;letter-spacing:normal;opacity:.8;margin:0 0 28px;padding-bottom:12px;border-bottom:1px solid currentColor}
+@media(max-width:900px){h1{letter-spacing:-.045em} .case-content{max-width:100%}}
+
 </style>
