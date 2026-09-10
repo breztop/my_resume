@@ -75,6 +75,8 @@ src/data/projects.js ──► HomeView / ProjectsView
 
 ## 本地开发与验收
 
+建议使用 Node.js 24，首次运行先执行 `npm ci`。
+
 ```sh
 npm run dev
 node scripts/check-projects.mjs
@@ -88,3 +90,26 @@ npm run preview -- --host 127.0.0.1 --port 5174
 - 检查包括图片加载、唯一主内容区域与主标题、横向溢出、搜索与分类组合、刷新和返回、关联项目、锚点、键盘、触屏与存储不可用场景。
 
 2026-09-05 重构验收：生产构建通过，54 组页面／屏宽检查和 20 项交互检查通过。测试使用本机无头 Chrome，未进行线上发布；跨浏览器与真实手机硬件表现不属于这次验证结果。
+
+## 发布到 GitHub Pages
+
+1. 将本次代码（包括 `.github/workflows/pages.yml`）提交并推送到 GitHub 仓库 `breztop/my_resume` 的 `main` 分支。
+2. 打开仓库 **Settings → Pages → Build and deployment**，将 **Source** 设为 **GitHub Actions**。不需要选择 `gh-pages` 分支或再创建一份工作流。
+3. 打开 **Actions → Deploy GitHub Pages → Run workflow**，选择 `main` 并运行。如果刚才推送触发的任务已成功，则无需重复运行；若因尚未启用 Pages 而失败，配置后重新运行即可。
+4. 等待 `build` 和 `deploy` 都成功，访问 [作品站](https://breztop.github.io/my_resume/)，并直接打开和刷新 [breconn 详情页](https://breztop.github.io/my_resume/projects/breconn/)。
+
+以后推送到 `main` 会自动部署。工作流使用 GitHub 自动提供的令牌，无需另填个人 Token。
+
+本地检查 Pages 构建：
+
+```sh
+node scripts/check-projects.mjs
+npm run build:pages
+npm run preview:pages -- --host 127.0.0.1 --port 5174
+```
+
+打开 `http://127.0.0.1:5174/my_resume/`。Pages 构建输出到 `dist/pages/`，工作流只上传该目录。图片、脚本和路由会使用部署子路径；构建脚本根据项目数据自动生成项目库及每个详情页的 `index.html`，支持直接访问和刷新，新增项目无需手写部署路由。未知地址使用 `404.html` 加载现有的缺失项目界面，HTTP 状态仍为 404。
+
+工作流从 Pages 设置读取基础路径，支持仓库子路径或自定义域名根路径。本地默认 `/my_resume/`；需要模拟其他路径时，构建前设置 `PAGES_BASE_PATH`，预览时追加 `--base /对应路径/`。原有 `npm run build` 仍输出 `dist/client/` 和 Sites 运行文件。
+
+配置依据：[Vite 的 GitHub Pages 部署指南](https://vite.dev/guide/static-deploy.html#github-pages)。

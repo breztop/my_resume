@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build && node scripts/prepare-sites.mjs",
+    "build:pages": "node scripts/build-pages.mjs",
+    "preview:pages": "vite preview --outDir dist/pages --base /my_resume/",
     "preview": "vite preview"
   },
   "dependencies": {
