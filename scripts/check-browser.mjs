@@ -47,14 +47,14 @@ try {
     }
   }
   await page.goto(base + '/projects', { waitUntil: 'networkidle' });
-  check('All 15 projects visible', await page.locator('.project-card').count() === 15);
+  check('All projects visible', await page.locator('.project-card').count() === projects.length);
   check('2D and 3D names are distinct', await page.getByRole('heading', { name: '部落战 · 2D', exact: true }).count() === 1 && await page.getByRole('heading', { name: '部落战 · 3D', exact: true }).count() === 1);
   await page.getByLabel('找一个作品', { exact: true }).fill('qT');
   check('Case-insensitive stack search', await page.locator('.project-card').count() > 0);
   await page.getByRole('button', { name: /^游戏 \/ 客户端/ }).click();
   check('Search intersects category', await page.locator('.project-card').count() === 0);
   await page.getByRole('button', { name: '查看全部作品 ↗' }).click();
-  check('Clear empty results restores all', await page.locator('.project-card').count() === 15);
+  check('Clear empty results restores all', await page.locator('.project-card').count() === projects.length);
   await page.getByLabel('找一个作品', { exact: true }).fill('没有这样的作品XYZ');
   check('Unmatched query has empty state', await page.locator('.empty-state').isVisible());
   await page.getByRole('button', { name: '清空搜索', exact: true }).click();

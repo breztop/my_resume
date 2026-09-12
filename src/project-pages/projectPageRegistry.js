@@ -16,4 +16,5 @@ export const projectPageComponents = {
   "branching-narrative": defineAsyncComponent(() => import("./BranchingNarrativePage.vue")),
   conutline: defineAsyncComponent(() => import("./ConutlinePage.vue")),
   breconn: defineAsyncComponent(() => import("./BreconnPage.vue")),
+  breinput: defineAsyncComponent(() => import("./BreinputPage.vue")),
 };
